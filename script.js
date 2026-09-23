@@ -39,7 +39,9 @@ if ('IntersectionObserver' in window && revealEls.length) {
   revealEls.forEach((el) => el.classList.add('is-visible'));
 }
 
-// Kontaktformular: Versand über FormSubmit (AJAX), Fallback mailto
+// Contact form: POST to our own endpoint, fallback mailto
+// Endpoint of ps_webhook.py behind nginx (deploy/nginx_api.simo-facility.de.conf).
+const FORM_ENDPOINT = 'https://api.simo-facility.de/formular/anfrage';
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
@@ -57,24 +59,22 @@ if (contactForm) {
     try {
       const ctrl = new AbortController();
       const timeoutId = setTimeout(() => ctrl.abort(), 6000);
-      const r = await fetch('https://api.web3forms.com/submit', {
+      // Own endpoint on our server (replaces Web3Forms, 22.09.2026) - no third-party form service.
+      const r = await fetch(FORM_ENDPOINT, {
         method: 'POST',
         signal: ctrl.signal,
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
-          access_key: 'b5f002df-f208-4c90-be0a-e45f22c0643b',
-          subject: subject,
-          from_name: 'SIMO Website',
-          Name: name,
+          name: name,
           email: email,
-          'Gewünschte Leistung': leistung,
-          Nachricht: nachricht,
-          botcheck: honey ? honey.value : ''
+          leistung: leistung,
+          nachricht: nachricht,
+          website: honey ? honey.value : ''
         })
       });
       clearTimeout(timeoutId);
       const j = await r.json().catch(() => null);
-      if (!r.ok || !j || String(j.success) === 'false') throw new Error('send failed');
+      if (!r.ok || !j || j.status !== 'ok') throw new Error('send failed');
       contactForm.querySelectorAll('input, select, textarea').forEach((el) => { el.value = ''; el.disabled = true; });
       btn.textContent = 'Anfrage gesendet ✓';
       if (hint) hint.textContent = 'Vielen Dank! Wir melden uns innerhalb von 24 Stunden. Tipp: Fotos vom Objekt gerne per WhatsApp – das macht Ihr Angebot noch präziser.';
