@@ -296,7 +296,7 @@ header.scrolled { box-shadow: 0 6px 24px rgba(8,29,48,0.06); }
 
 /* Trust bar */
 .trustbar { background: var(--light); border-bottom: 1px solid var(--border); padding: 38px 0; }
-.trustbar .container { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.trustbar .container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .trust-item { text-align: center; padding: 0 8px; min-width: 0; }
 .trust-item h4, .trust-item p { hyphens: auto; overflow-wrap: break-word; }
 .trust-item .icon-wrap {
@@ -542,6 +542,7 @@ footer { background: var(--navy-dark); color: #C6D2DC; padding: 60px 0 28px; }
   .hero .container { grid-template-columns: 1fr; }
   .hero-visual { order: -1; }
   .trustbar .container { grid-template-columns: repeat(2, 1fr); gap: 28px; }
+  .trustbar .trust-item:last-child:nth-child(odd) { grid-column: 1 / -1; }
   .area .container, .contact .container { grid-template-columns: 1fr; }
   .area-visual { order: -1; }
   body { padding-bottom: 72px; }
