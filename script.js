@@ -48,6 +48,10 @@ if (contactForm) {
     e.preventDefault();
     const name = contactForm.querySelector('#name').value.trim();
     const email = contactForm.querySelector('#email').value.trim();
+    const telefonEl = contactForm.querySelector('#telefon');
+    const telefon = telefonEl ? telefonEl.value.trim() : '';
+    const plzOrtEl = contactForm.querySelector('#plz_ort');
+    const plzOrt = plzOrtEl ? plzOrtEl.value.trim() : '';
     const leistung = contactForm.querySelector('#leistung').value;
     const nachricht = contactForm.querySelector('#nachricht').value.trim();
     const honey = contactForm.querySelector('#xtrafld');
@@ -67,6 +71,8 @@ if (contactForm) {
         body: JSON.stringify({
           name: name,
           email: email,
+          telefon: telefon,
+          plz_ort: plzOrt,
           leistung: leistung,
           nachricht: nachricht,
           website: honey ? honey.value : ''
@@ -81,7 +87,7 @@ if (contactForm) {
     } catch (err) {
       btn.disabled = false;
       btn.textContent = 'Anfrage senden';
-      const body = 'Name: ' + name + '\nE-Mail: ' + email + '\nGewünschte Leistung: ' + leistung + '\n\nNachricht:\n' + nachricht;
+      const body = 'Name: ' + name + '\nE-Mail: ' + email + (telefon ? '\nTelefon: ' + telefon : '') + '\nPLZ/Ort: ' + plzOrt + '\nGewünschte Leistung: ' + leistung + '\n\nNachricht:\n' + nachricht;
       window.location.href = 'mailto:info@simo-facility.de?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
     }
   });
